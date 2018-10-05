@@ -378,7 +378,7 @@ def scan(client, query=None, scroll='5m', raise_on_error=True,
                                      request_timeout=request_timeout,
                                      **scroll_kwargs)
 
-            for hit in resp['hits']['hits']:
+            for hit in resp['aggregations']['bucket_time']['buckets']:
                 yield hit
 
             # check if we have any errrors
@@ -396,7 +396,7 @@ def scan(client, query=None, scroll='5m', raise_on_error=True,
 
             scroll_id = resp.get('_scroll_id')
             # end of scroll
-            if scroll_id is None or not resp['hits']['hits']:
+            if scroll_id is None or not resp['aggregations']['bucket_time']['buckets']:
                 break
     finally:
         if scroll_id and clear_scroll:
